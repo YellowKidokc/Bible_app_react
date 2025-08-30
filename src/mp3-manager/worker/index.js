@@ -2,7 +2,7 @@
 // Handles MP3 streaming with range requests and authentication
 
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, env) {
     const url = new URL(request.url);
     
     // CORS headers
