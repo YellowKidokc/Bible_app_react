@@ -36,8 +36,7 @@ export async function createDB() {
     // Desktop: Tauri SQLite (only import when actually running in Tauri)
     dbPromise = (async () => {
       try {
-        // Use a vite-ignore comment so the module isn't bundled during web builds
-        const { Database } = await import(/* @vite-ignore */ 'tauri-plugin-sql-api');
+        const { Database } = await import('tauri-plugin-sql-api');
         const db = await Database.load('sqlite:bible.sqlite');
         
         return {
@@ -56,8 +55,7 @@ export async function createDB() {
     // Mobile: Capacitor SQLite
     dbPromise = (async () => {
       try {
-        // Same treatment for Capacitor plugin which isn't present in web builds
-        const { CapacitorSQLite } = await import(/* @vite-ignore */ '@capacitor-community/sqlite');
+        const { CapacitorSQLite } = await import('@capacitor-community/sqlite');
         const sqlite = CapacitorSQLite;
         
         const ret = await sqlite.createConnection('bible', false, 'no-encryption', 1, false);
