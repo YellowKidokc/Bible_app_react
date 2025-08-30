@@ -1,0 +1,19 @@
+name = "bible-audio-streaming"
+main = "src/index.js"
+compatibility_date = "2024-07-01"
+compatibility_flags = ["nodejs_compat"]
+
+# R2 bucket binding for audio storage
+[[r2_buckets]]
+binding = "AUDIO_BUCKET"
+bucket_name = "bible-audio-storage"
+
+# Environment variables for the Worker
+[vars]
+CORS_ORIGIN = "*"
+CACHE_CONTROL = "public, max-age=3600"
+
+# Worker routes (uncomment and modify for custom domain)
+# [[routes]]
+# pattern = "audio.yourdomain.com/*"
+# zone_name = "yourdomain.com"
