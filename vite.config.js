@@ -9,6 +9,11 @@ export default defineConfig({
     assetsDir: 'assets',
     sourcemap: false,
     rollupOptions: {
+      // Exclude platform-specific dependencies from web build
+      external: [
+        'tauri-plugin-sql-api',
+        '@capacitor-community/sqlite'
+      ],
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
@@ -17,5 +22,9 @@ export default defineConfig({
       }
     }
   },
-  base: '/' // Important for Cloudflare Pages
+  base: '/', // Important for Cloudflare Pages
+  define: {
+    // Ensure these are available for runtime platform detection
+    global: 'globalThis'
+  }
 })
