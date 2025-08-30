@@ -1,7 +1,8 @@
 /**
  * Bible database queries - chapter-scoped for fast loading
  */
-import { createDB } from './adapter.js';
+// Use the fixed adapter that routes database queries appropriately
+import { createDB } from './bible-fixed-adapter.js';
 
 const dbPromise = createDB();
 
