@@ -1,13 +1,49 @@
-# MP3 Manager Integration
+# MP3 Manager Integration Guide
 
-This folder contains Python utilities for managing and uploading the Bible MP3 collection. The tools here are integrated into the React application and can be executed from this directory.
+## Move Files from Standalone Package
 
-## Usage
+Copy from: `C:\Users\Yellowkid\Desktop\bible-mp3-manager\`
+Copy to: `C:\Users\Yellowkid\Desktop\Bible REACT\bible-hollow\src\mp3-manager\`
 
-Run upload scripts from the `scripts` folder, e.g.:
+### Files to copy:
+- `src/` (Python bible_mp3 package)
+- `scripts/` (CLI upload tools)  
+- `worker/` (Cloudflare Worker)
+- `config/` (wrangler.toml)
+- `requirements.txt`
+- `.env.template`
 
-```bash
-python scripts/upload_audio_collection.py --test-mode
-```
+## After copying files:
 
-Configure environment variables using `.env.template` as a guide.
+1. **Configure environment:**
+   ```bash
+   cd "C:\Users\Yellowkid\Desktop\Bible REACT\bible-hollow\src\mp3-manager"
+   cp .env.template .env
+   # Edit .env with your Cloudflare credentials
+   ```
+
+2. **Install Python dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Test upload (5 files only):**
+   ```bash
+   python scripts/upload_audio_collection.py --test-mode
+   ```
+
+4. **Deploy Cloudflare Worker:**
+   ```bash
+   cd worker
+   wrangler deploy
+   ```
+
+## Integration Benefits
+
+- Everything in one repository
+- React app can import MP3 metadata from your PostgreSQL database
+- Python scripts handle the bulk upload independently  
+- Cloudflare Worker provides streaming URLs for your React components
+- All gets pushed to GitHub together
+
+The Python scripts run independently but store audio metadata in the same PostgreSQL database your React app uses, so your Bible study interface can display linked audio resources.

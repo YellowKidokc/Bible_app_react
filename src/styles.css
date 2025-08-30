@@ -111,22 +111,3 @@
 .graph-legend{display:flex;gap:12px;padding:12px;border-top:1px solid var(--border);font-size:12px}
 .legend-item{display:flex;align-items:center;gap:4px}
 .legend-color{width:12px;height:12px;border-radius:2px}
-
-/* --- Shell layout from file map --- */
-.topnav{display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--border);background:#0d121a;padding:10px 14px;position:sticky;top:0;z-index:5}
-.tabs{display:flex;gap:6px;flex-wrap:wrap}
-.tab{padding:6px 10px;border-radius:8px;border:1px solid transparent}
-.tab:hover{background:#0f1520;border-color:var(--border)}
-.tab.active{background:#111a28;border-color:var(--acc)}
-.spacer{flex:1}
-.controls{display:flex;gap:8px;align-items:center}
-.control{display:flex;gap:6px;align-items:center}
-select{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 8px}
-
-.main{max-width:1200px;margin:0 auto;padding:14px}
-.stub{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px}
-
-.split{display:flex;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--panel);min-height:65vh}
-.pane{overflow:auto;padding:12px;min-width:200px}
-.divider{width:6px;background:#0f1520;border-left:1px solid var(--border);border-right:1px solid var(--border);cursor:col-resize}
-.divider:hover{background:#131c2a}

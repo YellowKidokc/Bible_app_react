@@ -1,0 +1,19 @@
+name = "bible-sync-worker"
+main = "workers/sync-worker.js"
+compatibility_date = "2024-07-01"
+
+# Hyperdrive binding for PostgreSQL connection
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "YOUR_HYPERDRIVE_ID"  # You'll need to create this
+database_id = "YOUR_DATABASE_ID"
+
+# D1 binding for edge cache
+[[d1_databases]]
+binding = "D1_DATABASE"
+database_name = "bible-cache"
+database_id = "YOUR_D1_ID"  # You'll need to create this
+
+# Scheduled trigger - runs every Sunday at 2 AM UTC
+[triggers]
+crons = ["0 2 * * 0"]
