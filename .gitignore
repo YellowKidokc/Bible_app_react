@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Local database assets are not committed to avoid oversized deployments
+public/db/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
