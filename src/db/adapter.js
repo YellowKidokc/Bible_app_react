@@ -8,14 +8,16 @@ let dbPromise = null;
 export async function createDB() {
   if (dbPromise) return dbPromise;
 
-  // For web deployment, always use API layer
-  if (typeof window !== 'undefined' && !window.__TAURI__ && !window.Capacitor?.isNativePlatform?.()) {
+  const isBrowser = typeof window !== 'undefined';
+  const isTauri = isBrowser && '__TAURI__' in window;
+  const isCap = isBrowser && window.Capacitor?.isNativePlatform?.();
+
+  if (!isTauri && !isCap) {
     dbPromise = Promise.resolve(new WebAPIAdapter());
     return dbPromise;
   }
-  
-  // For desktop/mobile, handle dynamically at runtime
-  dbPromise = createNativeDB();
+
+  dbPromise = createNativeDB({ isTauri, isCap });
   return dbPromise;
 }
 
@@ -90,14 +92,12 @@ class WebAPIAdapter {
 }
 
 // Native DB creation (only called when not in web environment)
-async function createNativeDB() {
-  // Check if we're in Tauri
-  if (typeof window !== 'undefined' && window.__TAURI__) {
+async function createNativeDB({ isTauri, isCap }) {
+  if (isTauri) {
     try {
-      // Dynamic import only when actually needed
-      const { Database } = await eval('import("tauri-plugin-sql-api")');
+      const { Database } = await import('tauri-plugin-sql-api');
       const db = await Database.load('sqlite:bible.sqlite');
-      
+
       return {
         all: (sql, params = []) => db.select(sql, params),
         get: async (sql, params = []) => {
@@ -110,16 +110,15 @@ async function createNativeDB() {
       throw error;
     }
   }
-  
-  // Check if we're in Capacitor
-  if (typeof window !== 'undefined' && window.Capacitor?.isNativePlatform?.()) {
+
+  if (isCap) {
     try {
-      const { CapacitorSQLite } = await eval('import("@capacitor-community/sqlite")');
+      const { CapacitorSQLite } = await import('@capacitor-community/sqlite');
       const sqlite = CapacitorSQLite;
-      
+
       const ret = await sqlite.createConnection('bible', false, 'no-encryption', 1, false);
       await ret.open();
-      
+
       return {
         all: async (sql, params = []) => {
           const result = await ret.query(sql, params);
@@ -136,6 +135,6 @@ async function createNativeDB() {
       throw error;
     }
   }
-  
+
   throw new Error('No supported database adapter found');
 }
