@@ -13,7 +13,9 @@ dist-ssr
 *.local
 
 # Local database assets are not committed to avoid oversized deployments
+db/
 public/db/
+*.sqlite
 
 # Editor directories and files
 .vscode/*
