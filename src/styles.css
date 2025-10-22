@@ -111,3 +111,55 @@
 .graph-legend{display:flex;gap:12px;padding:12px;border-top:1px solid var(--border);font-size:12px}
 .legend-item{display:flex;align-items:center;gap:4px}
 .legend-color{width:12px;height:12px;border-radius:2px}
+
+/* Enhanced Reader 3-Panel Layout */
+.enhanced-reader{display:flex;height:100vh;background:var(--bg);overflow:hidden}
+.resizable-panel{position:relative;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;transition:width 0.2s ease}
+.resizable-panel.right{border-right:none;border-left:1px solid var(--border)}
+.resizable-panel.collapsed{min-width:40px!important;max-width:40px!important}
+.panel-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+.panel-header h3{margin:0;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted)}
+.toggle-btn{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:4px;cursor:pointer;font-size:12px}
+.toggle-btn:hover{background:var(--border)}
+.panel-content{flex:1;overflow-y:auto;overflow-x:hidden}
+.panel-sections{padding:12px}
+.resize-handle{position:absolute;top:0;width:4px;height:100%;cursor:col-resize;z-index:10}
+.resize-handle.left{right:-2px}
+.resize-handle.right{left:-2px}
+.resize-handle:hover,.resize-handle:active{background:var(--acc)}
+.center-panel-container{flex:1;background:var(--panel);overflow-y:auto;display:flex;flex-direction:column}
+.center-panel{padding:16px;max-width:800px;margin:0 auto;width:100%}
+.center-panel .refbar{display:flex;gap:12px;align-items:center;margin-bottom:20px;padding:12px;background:var(--bg);border-radius:8px;border:1px solid var(--border)}
+.center-panel .verses{margin-top:16px}
+
+/* Improved Section Styles for Panels */
+.panel-sections .section{margin-bottom:12px}
+.panel-sections .section-head{font-size:13px}
+.panel-sections .chips li{font-size:12px;padding:4px 6px}
+.panel-sections .definition{font-size:11px;color:var(--muted);display:block;margin-top:2px}
+
+/* Settings Page */
+.settings-page{max-width:800px;margin:0 auto;padding:24px}
+.settings-page h2{margin-bottom:24px;color:var(--text)}
+.settings-section{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+.settings-section h3{margin:0 0 16px 0;color:var(--text);font-size:18px;border-bottom:1px solid var(--border);padding-bottom:8px}
+.settings-section h4{margin:16px 0 8px 0;color:var(--muted);font-size:14px;text-transform:uppercase;letter-spacing:0.5px}
+.setting-group{margin-bottom:16px}
+.setting-group label{display:block;color:var(--text);margin-bottom:6px;font-weight:500;font-size:14px}
+.setting-group select,.setting-group input[type="text"],.setting-group input[type="password"],.setting-group input[type="number"]{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:6px;font-size:14px}
+.api-key-input{display:flex;gap:8px}
+.api-key-input input{flex:1}
+.api-key-input button{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:10px 16px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.api-key-input button:hover{background:var(--border)}
+.help-text{font-size:12px;color:var(--muted);margin-top:4px}
+.content-checkboxes{display:flex;flex-direction:column;gap:8px}
+.content-checkboxes label{display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg);border-radius:6px;cursor:pointer;font-weight:normal}
+.content-checkboxes label:hover{background:var(--border)}
+.content-checkboxes input[type="checkbox"]{cursor:pointer;width:18px;height:18px}
+.commentary-toggles,.section-toggles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.toggle-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);padding:12px;border-radius:6px}
+.toggle-item label{margin:0;font-weight:500;color:var(--text)}
+.toggle-item select{background:var(--panel);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;min-width:150px}
+.reset-btn{background:#dc3545;color:white;border:none;padding:12px 24px;border-radius:6px;cursor:pointer;font-weight:500}
+.reset-btn:hover{background:#c82333}
+.reader-main{padding:0;margin:0}
