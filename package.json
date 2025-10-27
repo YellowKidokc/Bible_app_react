@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run build-commentaries && vite build",
+    "build-commentaries": "node scripts/build-commentaries.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -17,9 +18,11 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
+    "@iarna/toml": "^2.2.5",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",
+    "better-sqlite3": "^12.4.1",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",

@@ -1,7 +1,9 @@
 import React from 'react'
 import Section from './components/Section.jsx'
+import CommentaryPanel from './components/CommentaryPanel.jsx'
 import { useSettings } from './settings.jsx'
 import { getChapter, getVerseXrefs, getVerseStrongs, getVerseTimeline, getVerseResources, getVerseNotes, getBooks } from './db/queries.js';
+import { getCommentaries, getChapterCommentaries } from './db/commentaries.js';
 
 export default function Reader(){
   const { settings } = useSettings()
@@ -20,6 +22,7 @@ export default function Reader(){
   const [commMac, setCommMac] = React.useState([])
   const [commGill, setCommGill] = React.useState([])
   const [media, setMedia] = React.useState([])
+  const [tomlCommentaries, setTomlCommentaries] = React.useState([])
 
   React.useEffect(()=>{
     (async ()=>{
@@ -72,11 +75,20 @@ export default function Reader(){
           const videoData = await getVerseResources(ids, 'video');
           setMedia([...audioData, ...videoData]);
         }
+
+        // Load TOML commentaries from commentaries.sqlite
+        if (ref.verse) {
+          const tomlData = await getCommentaries(ref.book, ref.chapter, ref.verse);
+          setTomlCommentaries(tomlData);
+        } else {
+          const tomlData = await getChapterCommentaries(ref.book, ref.chapter);
+          setTomlCommentaries(tomlData);
+        }
       } catch (error) {
         console.error('Error loading side data:', error);
       }
     })()
-  }, [ids, settings.sections])
+  }, [ids, settings.sections, ref])
 
   return (
     <div className="reader">
@@ -133,6 +145,33 @@ export default function Reader(){
             }[provider]} />
           </Section>
         )
+      )}
+
+      {/* IMPORTED COMMENTARIES (from TOML files) */}
+      {tomlCommentaries.length > 0 && (
+        <Section title="Imported Commentaries" defaultOpen={true} count={tomlCommentaries.length}>
+          <div className="commentary-list">
+            {tomlCommentaries.map((commentary) => (
+              <div key={commentary.id} className="commentary-item">
+                <div className="commentary-meta">
+                  <span className="commentary-author">{commentary.author}</span>
+                  {commentary.source && (
+                    <span className="commentary-source"> • {commentary.source}</span>
+                  )}
+                  <span className="commentary-ref">
+                    {' '}• {commentary.book} {commentary.chapter}:
+                    {commentary.verse_end
+                      ? `${commentary.verse}-${commentary.verse_end}`
+                      : commentary.verse}
+                  </span>
+                </div>
+                <div className="commentary-text">
+                  {commentary.text}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
       )}
 
       {/* STRONG'S */}
