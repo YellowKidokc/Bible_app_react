@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useSettings } from '../store/settings.js'
 
 const AI_PROMPTS = {
   sermonCoach: {
@@ -67,7 +68,10 @@ Content: {content}`
   }
 }
 
-export default function AIAssist({ currentNote, selectedSources, onInsertText }) {
+export default function AIAssist({ currentNote, currentVerses, verseIds, selectedSources, onInsertText }) {
+  const settings = useSettings()
+  const { ai } = settings
+
   const [activePrompt, setActivePrompt] = useState(null)
   const [customPrompt, setCustomPrompt] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
@@ -76,37 +80,53 @@ export default function AIAssist({ currentNote, selectedSources, onInsertText })
   const executePrompt = async (promptKey, customText = '') => {
     setIsProcessing(true)
     setActivePrompt(promptKey)
-    
+
     try {
+      // Check if API key is configured
+      if (!ai.apiKey) {
+        setResult('Please configure your API key in Settings before using AI features.')
+        setIsProcessing(false)
+        return
+      }
+
       const prompt = promptKey === 'custom' ? customText : AI_PROMPTS[promptKey]?.prompt
-      
+
+      // Build verse context
+      const versesText = currentVerses?.map(v => `${v.n}. ${v.text}`).join('\n') || ''
+
       // Replace placeholders with actual content
       const processedPrompt = prompt
-        .replace('{content}', currentNote?.content || '')
-        .replace('{verses}', currentNote?.verse_ids?.join(', ') || '')
-        .replace('{sources}', selectedSources?.map(s => s.title).join(', ') || '')
+        .replace('{content}', currentNote?.content || versesText || '')
+        .replace('{verses}', versesText || verseIds?.join(', ') || '')
+        .replace('{sources}', selectedSources?.map(s => s.title || s.provider).join(', ') || '')
         .replace('{timeline}', 'Biblical timeline context') // TODO: get from timeline data
-      
+
       const response = await fetch('/api/ai/assist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt: processedPrompt,
+          verses: currentVerses,
+          verseIds: verseIds,
           sources: selectedSources,
-          noteId: currentNote?.id
+          noteId: currentNote?.id,
+          provider: ai.provider,
+          apiKey: ai.apiKey,
+          model: ai.model
         })
       })
-      
+
       if (response.ok) {
         const data = await response.json()
         setResult(data.result)
       } else {
-        setResult('Error: Could not process request')
+        const errorData = await response.json().catch(() => ({}))
+        setResult(`Error: ${errorData.error || 'Could not process request'}`)
       }
     } catch (error) {
       setResult('Error: ' + error.message)
     }
-    
+
     setIsProcessing(false)
   }
 
@@ -185,10 +205,10 @@ export default function AIAssist({ currentNote, selectedSources, onInsertText })
       <div className="context-info">
         <h4>Context</h4>
         <div className="context-item">
-          <strong>Note Type:</strong> {currentNote?.type || 'None'}
+          <strong>Current Verses:</strong> {currentVerses?.length || 0}
         </div>
         <div className="context-item">
-          <strong>Linked Verses:</strong> {currentNote?.verse_ids?.length || 0}
+          <strong>Note Type:</strong> {currentNote?.type || 'Bible Study'}
         </div>
         <div className="context-item">
           <strong>Sources:</strong> {selectedSources?.length || 0}
